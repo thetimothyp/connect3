@@ -85,23 +85,23 @@ public class GameLogic
 	
 	private void cascadeVertical(int y, int x) {
 		switch (y) {
-		case 4:
-			board.getBoard()[y+1][x] = board.getBoard()[y-2][x];
-			board.getBoard()[y+1][x].setCoords(y+1, x);
-			board.getBoard()[y][x] = board.getBoard()[y-3][x];
-			board.getBoard()[y][x].setCoords(y, x);
-			board.getBoard()[y-1][x] = board.getBoard()[y-4][x];
-			board.getBoard()[y-1][x].setCoords(y-1, x);
-			break;
 		case 3:
+			board.getBoard()[y+2][x] = board.getBoard()[y-1][x];
+			board.getBoard()[y+2][x].setCoords(y+2,x);
 			board.getBoard()[y+1][x] = board.getBoard()[y-2][x];
-			board.getBoard()[y+1][x].setCoords(y+1, x);
+			board.getBoard()[y+1][x].setCoords(y+1,x);
 			board.getBoard()[y][x] = board.getBoard()[y-3][x];
-			board.getBoard()[y][x].setCoords(y, x);
+			board.getBoard()[y][x].setCoords(y,x);
 			break;
 		case 2:
+			board.getBoard()[y+2][x] = board.getBoard()[y-1][x];
+			board.getBoard()[y+2][x].setCoords(y+2,x);
 			board.getBoard()[y+1][x] = board.getBoard()[y-2][x];
-			board.getBoard()[y+1][x].setCoords(y+1, x);
+			board.getBoard()[y+1][x].setCoords(y+1,x);
+			break;
+		case 1:
+			board.getBoard()[y+2][x] = board.getBoard()[y-1][x];
+			board.getBoard()[y+2][x].setCoords(y+2,x);
 			break;
 		}
 		for (int i = 0; i < 3; ++i) {
@@ -131,7 +131,7 @@ public class GameLogic
 		matches = new HashSet<GamePiece>();
 		for (int i = 0; i < board.getHeight(); ++i) {
 			for (int j = 0; j < board.getWidth(); ++j) {
-				if (i > 0 && i < board.getHeight()-1) {
+				if (i < board.getHeight()-2) {
 					if (checkForVerticalMatch(i,j)) {
 						matches.add(board.getPiece(i,j));
 						verticalMatches.add(board.getPiece(i, j));
@@ -148,8 +148,8 @@ public class GameLogic
 	}
 	
 	private boolean checkForVerticalMatch(int i, int j) {
-		if ((board.getPiece(i-1,j).equals(board.getPiece(i, j)) && 
-				board.getPiece(i+1, j).equals(board.getPiece(i, j)))) {
+		if ((board.getPiece(i+1,j).equals(board.getPiece(i, j)) && 
+				board.getPiece(i+2, j).equals(board.getPiece(i, j)))) {
 			return true;
 		}
 		return false;
