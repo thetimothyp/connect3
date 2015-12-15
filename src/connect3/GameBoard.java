@@ -28,8 +28,8 @@ public class GameBoard
 		GamePiece temp = new GamePiece(board[x1][y1]);
 		board[x1][y1] = board[x2][y2];
 		board[x2][y2] = temp;
-		board[x2][y2].setCoords(x1, y1);
-		board[x1][y1].setCoords(x2, y2);
+		board[x2][y2].setCoords(x2, y2);
+		board[x1][y1].setCoords(x1, y1);
 	}
 	
 	public GamePiece[][] getBoard() {

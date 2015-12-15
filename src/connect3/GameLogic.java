@@ -8,12 +8,14 @@ public class GameLogic
 	private HashSet<GamePiece> verticalMatches;
 	private HashSet<GamePiece> horizontalMatches;
 	private HashSet<GamePiece> matches;
+	private int points;
 
 	public GameLogic(GameBoard board) {
 		this.board = board;
 		verticalMatches = new HashSet<GamePiece>();
 		horizontalMatches = new HashSet<GamePiece>();
 		matches = new HashSet<GamePiece>();
+		points = 0;
 	}
 	
 	public void displayMatches() {
@@ -22,7 +24,12 @@ public class GameLogic
 		if (matches.size() > 0) {
 			String toPrint = "";
 			for (GamePiece p : matches) {
-				toPrint += p.getCoords() + ",";
+				toPrint += p.getCoords();
+				if (isVerticalMatch(p)) {
+					toPrint += "(V),";
+				}
+				else 
+					toPrint += "(H),";
 			}
 			System.out.println(toPrint.substring(0,toPrint.length()-1));
 		}
@@ -81,6 +88,8 @@ public class GameLogic
 	}
 	
 	private void findMatches() {
+		verticalMatches = new HashSet<GamePiece>();
+		horizontalMatches = new HashSet<GamePiece>();
 		matches = new HashSet<GamePiece>();
 		for (int i = 0; i < board.getHeight(); ++i) {
 			for (int j = 0; j < board.getWidth(); ++j) {
