@@ -14,6 +14,7 @@ public class Match
 		this.origin = origin;
 		this.size = size;
 		this.board = board;
+		this.orientation = orientation;
 		x = origin.getCoords().getX();
 		y = origin.getCoords().getY();
 		members = new HashSet<GamePiece>();
@@ -41,5 +42,9 @@ public class Match
 	
 	public boolean containsPiece(GamePiece p) {
 		return members.contains(p);
+	}
+	
+	public int getOrientation() {
+		return orientation;
 	}
 }
