@@ -17,15 +17,11 @@ import java.util.*;
 public class GameLogic
 {
 	private GameBoard board;
-	private HashSet<GamePiece> verticalMatches;
-	private HashSet<GamePiece> horizontalMatches;
 	private HashSet<Match> matches;
 	private int points;
 
 	public GameLogic(GameBoard board) {
 		this.board = board;
-		verticalMatches = new HashSet<GamePiece>();
-		horizontalMatches = new HashSet<GamePiece>();
 		matches = new HashSet<Match>();
 		points = 0;
 	}
@@ -38,10 +34,10 @@ public class GameLogic
 			for (Match m : matches) {
 				toPrint += m.getOrigin().getCoords();
 				if (isVerticalMatch(m)) {
-					toPrint += "(V),";
+					toPrint += "(" + m.getSize() + "V),";
 				}
 				else 
-					toPrint += "(H),";
+					toPrint += "(" + m.getSize() + "H),";
 			}
 			System.out.println(toPrint.substring(0,toPrint.length()-1));
 		}
@@ -126,21 +122,17 @@ public class GameLogic
 	}
 	
 	private void findMatches() {
-		verticalMatches = new HashSet<GamePiece>();
-		horizontalMatches = new HashSet<GamePiece>();
 		matches = new HashSet<Match>();
 		for (int i = 0; i < board.getHeight(); ++i) {
 			for (int j = 0; j < board.getWidth(); ++j) {
 				if (i < board.getHeight()-2) {
 					if (checkForVerticalMatch(i,j) > 0) {
 						matches.add(new Match(board.getPiece(i,j), checkForVerticalMatch(i,j), 1, board));
-						verticalMatches.add(board.getPiece(i, j));
 					}
 				}
 				if (j < board.getWidth()-2) {
 					if (checkForHorizontalMatch(i,j) > 0) {
 						matches.add(new Match(board.getPiece(i, j), checkForHorizontalMatch(i,j), 0, board));
-						horizontalMatches.add(board.getPiece(i, j));
 					}
 				}
 			}
