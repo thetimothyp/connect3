@@ -132,13 +132,13 @@ public class GameLogic
 		for (int i = 0; i < board.getHeight(); ++i) {
 			for (int j = 0; j < board.getWidth(); ++j) {
 				if (i < board.getHeight()-2) {
-					if (checkForVerticalMatch(i,j)) {
+					if (checkForVerticalMatch(i,j) > 0) {
 						matches.add(board.getPiece(i,j));
 						verticalMatches.add(board.getPiece(i, j));
 					}
 				}
 				if (j < board.getWidth()-2) {
-					if (checkForHorizontalMatch(i,j)) {
+					if (checkForHorizontalMatch(i,j) > 0) {
 						matches.add(board.getPiece(i, j));
 						horizontalMatches.add(board.getPiece(i, j));
 					}
@@ -147,19 +147,21 @@ public class GameLogic
 		}
 	}
 	
-	private boolean checkForVerticalMatch(int i, int j) {
+	private int checkForVerticalMatch(int i, int j) {
+		int size = 0;
 		if ((board.getPiece(i+1,j).equals(board.getPiece(i, j)) && 
 				board.getPiece(i+2, j).equals(board.getPiece(i, j)))) {
-			return true;
+			size = 3;
 		}
-		return false;
+		return size;
 	}
 	
-	private boolean checkForHorizontalMatch(int i, int j) {
+	private int checkForHorizontalMatch(int i, int j) {
+		int size = 0;
 		if ((board.getPiece(i,j+1).equals(board.getPiece(i, j)) && 
 				board.getPiece(i, j+2).equals(board.getPiece(i, j)))) {
-			return true;
+			size = 3;
 		}
-		return false;
+		return size;
 	}
 }
