@@ -28,6 +28,8 @@ public class GameBoard
 		GamePiece temp = new GamePiece(board[x1][y1]);
 		board[x1][y1] = board[x2][y2];
 		board[x2][y2] = temp;
+		board[x2][y2].setCoords(x1, y1);
+		board[x1][y1].setCoords(x2, y2);
 	}
 	
 	public GamePiece[][] getBoard() {
@@ -62,6 +64,9 @@ public class GameBoard
 	}
 	
 	private void populateBoard(GameLogic logic) {
+		//Draws the board
+		//If there is already a match in the board, the board is redrawn
+		//until there are no matches
 		do {
 			for (int i = 0; i < height; ++i) {
 				for (int j = 0; j < width; ++j) {

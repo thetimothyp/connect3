@@ -21,6 +21,12 @@ public class GameManager
 			System.out.println("-----------\n");
 			game.displayBoard();
 			logic.displayMatches();
+			while (logic.hasMatches()) {
+				logic.cascade();
+				game.displayBoard();
+				logic.displayMatches();
+			}
+//			game.displayBoard();
 		}
 		in.close();
 	}
