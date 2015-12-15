@@ -2,6 +2,18 @@ package connect3;
 
 import java.util.*;
 
+/*
+ * Implements the logic for the game
+ * 
+ * Player may swap one item with one other item at a time
+ * 
+ * A match is defined as 3 of the same item in a row (horizontally or vertically)
+ * 
+ * A match is represented by the coordinates of its leftmost member if horizontal and
+ * its topmost member if vertical
+ * 
+ */
+
 public class GameLogic
 {
 	private GameBoard board;
@@ -37,14 +49,6 @@ public class GameLogic
 			System.out.println();
 	}
 	
-	public void cascadePiece(int y, int x) {
-		for (int i = y; i > 0; --i) {
-			board.getBoard()[i][x] = board.getBoard()[i-1][x];
-			board.getBoard()[i][x].setCoords(i, x);
-		}
-		board.getBoard()[0][x] = generatePiece();
-	}
-	
 	public void cascade() {
 		int x, y;
 		for (GamePiece p : matches) {
@@ -52,13 +56,11 @@ public class GameLogic
 			y = p.getCoords().getY();
 			if (isHorizontalMatch(p)) {
 				cascadePiece(x,y);
-				cascadePiece(x,y-1);
 				cascadePiece(x,y+1);
+				cascadePiece(x,y+2);
 			}
 			if (isVerticalMatch(p)) {
-				cascadePiece(x,y);
-				cascadePiece(x-1,y);
-				cascadePiece(x+1,y);
+				cascadeVertical(x,y);
 			}
 		}
 	}
@@ -70,6 +72,42 @@ public class GameLogic
 	
 	public HashSet<GamePiece> getMatches() {
 		return matches;
+	}
+	
+	private void cascadePiece(int y, int x) {
+		for (int i = y; i > 0; --i) {
+			board.getBoard()[i][x] = board.getBoard()[i-1][x];
+			board.getBoard()[i][x].setCoords(i, x);
+		}
+		board.getBoard()[0][x] = generatePiece();
+		board.getBoard()[0][x].setCoords(0, x);
+	}
+	
+	private void cascadeVertical(int y, int x) {
+		switch (y) {
+		case 4:
+			board.getBoard()[y+1][x] = board.getBoard()[y-2][x];
+			board.getBoard()[y+1][x].setCoords(y+1, x);
+			board.getBoard()[y][x] = board.getBoard()[y-3][x];
+			board.getBoard()[y][x].setCoords(y, x);
+			board.getBoard()[y-1][x] = board.getBoard()[y-4][x];
+			board.getBoard()[y-1][x].setCoords(y-1, x);
+			break;
+		case 3:
+			board.getBoard()[y+1][x] = board.getBoard()[y-2][x];
+			board.getBoard()[y+1][x].setCoords(y+1, x);
+			board.getBoard()[y][x] = board.getBoard()[y-3][x];
+			board.getBoard()[y][x].setCoords(y, x);
+			break;
+		case 2:
+			board.getBoard()[y+1][x] = board.getBoard()[y-2][x];
+			board.getBoard()[y+1][x].setCoords(y+1, x);
+			break;
+		}
+		for (int i = 0; i < 3; ++i) {
+			board.getBoard()[i][x] = generatePiece();
+			board.getBoard()[i][x].setCoords(i, x);
+		}
 	}
 	
 	private GamePiece generatePiece() {
@@ -99,7 +137,7 @@ public class GameLogic
 						verticalMatches.add(board.getPiece(i, j));
 					}
 				}
-				if (j > 0 && j < board.getWidth()-1) {
+				if (j < board.getWidth()-2) {
 					if (checkForHorizontalMatch(i,j)) {
 						matches.add(board.getPiece(i, j));
 						horizontalMatches.add(board.getPiece(i, j));
@@ -118,8 +156,8 @@ public class GameLogic
 	}
 	
 	private boolean checkForHorizontalMatch(int i, int j) {
-		if ((board.getPiece(i,j-1).equals(board.getPiece(i, j)) && 
-				board.getPiece(i, j+1).equals(board.getPiece(i, j)))) {
+		if ((board.getPiece(i,j+1).equals(board.getPiece(i, j)) && 
+				board.getPiece(i, j+2).equals(board.getPiece(i, j)))) {
 			return true;
 		}
 		return false;

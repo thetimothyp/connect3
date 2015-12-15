@@ -26,9 +26,11 @@ public class GameManager
 			System.out.println("-----------\n");
 			game.displayBoard();
 			logic.displayMatches();
+			game.printCoords();
 			while (logic.hasMatches()) {
 				logic.cascade();
 				game.displayBoard();
+				game.printCoords();
 				logic.displayMatches();
 			}
 //			game.displayBoard();

@@ -22,6 +22,7 @@ public class GameBoard
 	public void generateBoard(GameLogic logic) {
 		populateBoard(logic);
 		displayBoard();
+		printCoords();
 	}
 	
 	public void swap(int x1, int y1, int x2, int y2) {
@@ -75,6 +76,15 @@ public class GameBoard
 				}
 			}
 		} while (logic.hasMatches());
+	}
+	
+	public void printCoords() {
+		for (int i = 0; i < height; ++i) {
+			for (int j = 0; j < width; ++j) {
+				System.out.print(board[i][j].getCoords() + " ");
+			}
+			System.out.println();
+		}
 	}
 	
 	private GamePiece generatePiece() {
