@@ -131,12 +131,25 @@ public class GameLogic
 					}
 				}
 				if (j < board.getWidth()-2) {
-					if (checkForHorizontalMatch(i,j) > 0) {
+					if (isInMatch(board.getPiece(i, j))) {
+						continue;
+					}
+					else if (checkForHorizontalMatch(i,j) > 0) {
 						matches.add(new Match(board.getPiece(i, j), checkForHorizontalMatch(i,j), 0, board));
 					}
 				}
 			}
 		}
+	}
+	
+	//Checks to see whether GamePiece p is already part of a Match
+	private boolean isInMatch(GamePiece p) {
+		for (Match m : matches) {
+			if (m.containsPiece(p)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private int checkForVerticalMatch(int i, int j) {
