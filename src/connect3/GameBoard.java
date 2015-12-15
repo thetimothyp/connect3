@@ -22,7 +22,6 @@ public class GameBoard
 	public void generateBoard(GameLogic logic) {
 		populateBoard(logic);
 		displayBoard();
-		printCoords();
 	}
 	
 	public void swap(int x1, int y1, int x2, int y2) {
