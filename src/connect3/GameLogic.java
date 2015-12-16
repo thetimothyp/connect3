@@ -56,7 +56,7 @@ public class GameLogic
 				}
 			}
 			if (isVerticalMatch(m)) {
-				cascadeVertical(x,y);
+				cascadeVertical(x,y, m.getSize());
 			}
 		}
 	}
@@ -79,7 +79,7 @@ public class GameLogic
 		board.getBoard()[0][x].setCoords(0, x);
 	}
 	
-	private void cascadeVertical(int y, int x) {
+	private void cascadeVertical(int y, int x, int size) {
 		switch (y) {
 		case 3:
 			board.getBoard()[y+2][x] = board.getBoard()[y-1][x];
@@ -126,7 +126,10 @@ public class GameLogic
 		for (int i = 0; i < board.getHeight(); ++i) {
 			for (int j = 0; j < board.getWidth(); ++j) {
 				if (i < board.getHeight()-2) {
-					if (checkForVerticalMatch(i,j) > 0) {
+					if (isInMatch(board.getPiece(i, j))) {
+						continue;
+					}
+					else if (checkForVerticalMatch(i,j) > 0) {
 						matches.add(new Match(board.getPiece(i,j), checkForVerticalMatch(i,j), 1, board));
 					}
 				}
@@ -157,6 +160,12 @@ public class GameLogic
 		if ((board.getPiece(i+1,j).equals(board.getPiece(i, j)) && 
 				board.getPiece(i+2, j).equals(board.getPiece(i, j)))) {
 			size = 3;
+			if (i < board.getHeight()-3 && board.getPiece(i+3, j).equals(board.getPiece(i, j))) {
+				size = 4;
+				if (i < board.getHeight()-3 && board.getPiece(i+4, j).equals(board.getPiece(i, j))) {
+					size = 5;
+				}
+			}
 		}
 		return size;
 	}
