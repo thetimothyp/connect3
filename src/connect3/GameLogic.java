@@ -51,9 +51,9 @@ public class GameLogic
 			x = m.getOrigin().getCoords().getX();
 			y = m.getOrigin().getCoords().getY();
 			if (isHorizontalMatch(m)) {
-				cascadePiece(x,y);
-				cascadePiece(x,y+1);
-				cascadePiece(x,y+2);
+				for (int i = 0; i < m.getSize(); ++i) {
+					cascadePiece(x,y+i);
+				}
 			}
 			if (isVerticalMatch(m)) {
 				cascadeVertical(x,y);
@@ -166,6 +166,12 @@ public class GameLogic
 		if ((board.getPiece(i,j+1).equals(board.getPiece(i, j)) && 
 				board.getPiece(i, j+2).equals(board.getPiece(i, j)))) {
 			size = 3;
+			if (j < board.getWidth()-3 && board.getPiece(i, j+3).equals(board.getPiece(i, j))) {
+				size = 4;
+				if (j < board.getWidth()-4 && board.getPiece(i, j+4).equals(board.getPiece(i, j))) {
+					size = 5;
+				}
+			}
 		}
 		return size;
 	}
