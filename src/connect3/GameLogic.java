@@ -18,12 +18,13 @@ public class GameLogic
 {
 	private GameBoard board;
 	private HashSet<Match> matches;
-	private int points;
+	private int points, turns;
 
 	public GameLogic(GameBoard board) {
 		this.board = board;
 		matches = new HashSet<Match>();
 		points = 0;
+		turns = 0;
 	}
 	
 	public void displayMatches() {
@@ -77,6 +78,18 @@ public class GameLogic
 	
 	public int getTotalPoints() {
 		return points;
+	}
+	
+	public void displayTurns() {
+		System.out.println("Turns: " + turns);
+	}
+	
+	public void addTurn() {
+		++turns;
+	}
+	
+	public int getTurns() {
+		return turns;
 	}
 	
 	// Remove the piece at (y, x) and cascade all the pieces above it down by 1 space
