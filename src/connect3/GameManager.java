@@ -6,12 +6,13 @@ public class GameManager
 {
 	public GameManager() {
 		GameBoard game = new GameBoard(6,6);
-		GameLogic logic = new GameLogic(game);
+		GameLogic logic = new GameLogic(game, 10);
 		game.generateBoard(logic);
+		logic.displayTurns();
 		
 		
 		Scanner in = new Scanner(System.in);
-		while (logic.getTotalPoints() < 500) {
+		while (logic.getTotalPoints() < 500 && logic.getTurns() > 0) {
 			
 			// Get input for coordinates for items to swap
 			
@@ -22,7 +23,7 @@ public class GameManager
 			int y2 = in.nextInt();
 			int x2 = in.nextInt();
 			game.swap(y1, x1, y2, x2);
-			logic.addTurn();
+			logic.takeTurn();
 			
 			System.out.println("-----------\n");
 			game.displayBoard();
@@ -41,7 +42,12 @@ public class GameManager
 			}
 		}
 		in.close();
-		System.out.println("YOU WON WITH " + logic.getTotalPoints() + 
-			" POINTS IN " + logic.getTurns() + " TURNS");
+		if (logic.getTotalPoints() > 500) {
+			System.out.println("YOU WON WITH " + logic.getTotalPoints() + 
+				" POINTS AND " + logic.getTurns() + " TURNS LEFT");
+		}
+		else {
+			System.out.println("YOU LOST");
+		}
 	}
 }
