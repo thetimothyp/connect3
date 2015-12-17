@@ -58,6 +58,7 @@ public class GameLogic
 			if (isVerticalMatch(m)) {
 				cascadeVertical(x,y, m.getSize());
 			}
+			points += m.getPoints();
 		}
 	}
 	
@@ -68,6 +69,14 @@ public class GameLogic
 	
 	public HashSet<Match> getMatches() {
 		return matches;
+	}
+	
+	public void displayTotalPoints() {
+		System.out.println("Points: " + points);
+	}
+	
+	public int getTotalPoints() {
+		return points;
 	}
 	
 	// Remove the piece at (y, x) and cascade all the pieces above it down by 1 space
