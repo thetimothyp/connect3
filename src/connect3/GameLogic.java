@@ -70,6 +70,7 @@ public class GameLogic
 		return matches;
 	}
 	
+	// Remove the piece at (y, x) and cascade all the pieces above it down by 1 space
 	private void cascadePiece(int y, int x) {
 		for (int i = y; i > 0; --i) {
 			board.getBoard()[i][x] = board.getBoard()[i-1][x];
@@ -80,27 +81,15 @@ public class GameLogic
 	}
 	
 	private void cascadeVertical(int y, int x, int size) {
-		switch (y) {
-		case 3:
-			board.getBoard()[y+2][x] = board.getBoard()[y-1][x];
-			board.getBoard()[y+2][x].setCoords(y+2,x);
-			board.getBoard()[y+1][x] = board.getBoard()[y-2][x];
-			board.getBoard()[y+1][x].setCoords(y+1,x);
-			board.getBoard()[y][x] = board.getBoard()[y-3][x];
-			board.getBoard()[y][x].setCoords(y,x);
-			break;
-		case 2:
-			board.getBoard()[y+2][x] = board.getBoard()[y-1][x];
-			board.getBoard()[y+2][x].setCoords(y+2,x);
-			board.getBoard()[y+1][x] = board.getBoard()[y-2][x];
-			board.getBoard()[y+1][x].setCoords(y+1,x);
-			break;
-		case 1:
-			board.getBoard()[y+2][x] = board.getBoard()[y-1][x];
-			board.getBoard()[y+2][x].setCoords(y+2,x);
-			break;
+		// replace each tile in the match with the tile [size] spaces above it
+		// i.e (4,5) in a match of size 4 becomes the tile at (0,5)
+		for (int i = size - y; i < size; ++i) {
+			board.getBoard()[y+i][x] = board.getBoard()[y+i-size][x];
+			board.getBoard()[y+i][x].setCoords(y+i, x);
 		}
-		for (int i = 0; i < 3; ++i) {
+
+		// fill in top [size] spaces with new tiles
+		for (int i = 0; i < size; ++i) {
 			board.getBoard()[i][x] = generatePiece();
 			board.getBoard()[i][x].setCoords(i, x);
 		}
@@ -121,10 +110,16 @@ public class GameLogic
 		return m.getOrientation() == 1;
 	}
 	
+	// Finds all the matches in the current board and adds them to the set of Matches
 	private void findMatches() {
 		matches = new HashSet<Match>();
 		for (int i = 0; i < board.getHeight(); ++i) {
 			for (int j = 0; j < board.getWidth(); ++j) {
+				
+				// Matches are at least 3, so any i within 2 spaces of the height needn't be
+				// checked for a vertical match
+				// Horizontal matches still need to be checked for all i
+				
 				if (i < board.getHeight()-2) {
 					if (isInMatch(board.getPiece(i, j))) {
 						continue;
@@ -133,6 +128,11 @@ public class GameLogic
 						matches.add(new Match(board.getPiece(i,j), checkForVerticalMatch(i,j), 1, board));
 					}
 				}
+				
+				// Any j within 2 spaces of the width needn't be checked for
+				// a horizontal match
+				// Vertical matches still need to be checked for all j
+				
 				if (j < board.getWidth()-2) {
 					if (isInMatch(board.getPiece(i, j))) {
 						continue;
@@ -155,14 +155,20 @@ public class GameLogic
 		return false;
 	}
 	
+	// Checks if the piece at (i,j) is the origin for a vertical match
+	// Returns the size of the match if there is one, otherwise returns 0
 	private int checkForVerticalMatch(int i, int j) {
 		int size = 0;
 		if ((board.getPiece(i+1,j).equals(board.getPiece(i, j)) && 
 				board.getPiece(i+2, j).equals(board.getPiece(i, j)))) {
 			size = 3;
+			
+			// If there are more spaces on the board to check, then check them to see if they
+			// should be included in the match
+			
 			if (i < board.getHeight()-3 && board.getPiece(i+3, j).equals(board.getPiece(i, j))) {
 				size = 4;
-				if (i < board.getHeight()-3 && board.getPiece(i+4, j).equals(board.getPiece(i, j))) {
+				if (i < board.getHeight()-4 && board.getPiece(i+4, j).equals(board.getPiece(i, j))) {
 					size = 5;
 				}
 			}
@@ -170,11 +176,17 @@ public class GameLogic
 		return size;
 	}
 	
+	// Checks if the piece at (i,j) is the origin for a horizontal match
+	// Returns the size of the match if there is one, otherwise returns 0
 	private int checkForHorizontalMatch(int i, int j) {
 		int size = 0;
 		if ((board.getPiece(i,j+1).equals(board.getPiece(i, j)) && 
 				board.getPiece(i, j+2).equals(board.getPiece(i, j)))) {
 			size = 3;
+			
+			// If there are more spaces on the board to check, then check them to see if they
+			// should be included in the match
+			
 			if (j < board.getWidth()-3 && board.getPiece(i, j+3).equals(board.getPiece(i, j))) {
 				size = 4;
 				if (j < board.getWidth()-4 && board.getPiece(i, j+4).equals(board.getPiece(i, j))) {
