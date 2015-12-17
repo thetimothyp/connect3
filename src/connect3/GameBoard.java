@@ -77,6 +77,8 @@ public class GameBoard
 		} while (logic.hasMatches());
 	}
 	
+	// For debugging
+	
 	public void printCoords() {
 		for (int i = 0; i < height; ++i) {
 			for (int j = 0; j < width; ++j) {

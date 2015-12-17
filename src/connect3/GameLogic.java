@@ -27,7 +27,20 @@ public class GameLogic
 		turnsLeft = turnLimit;
 	}
 	
-	public void displayMatches() {
+	//Updates GameBoard and displays info for the turn
+	
+	public void cascadeAndDisplay() {
+		cascade();
+		board.displayBoard();
+		displayTotalPoints();
+		displayTurns();
+		displayMatches();
+	}
+	
+	// Displays all Matches with the following syntax: (y,x)([size][orientation])
+	// i.e (3,0)(4H)
+	
+	private void displayMatches() {
 		findMatches();
 		System.out.print(matches.size() + " Matches: ");
 		if (matches.size() > 0) {
@@ -46,7 +59,10 @@ public class GameLogic
 			System.out.println();
 	}
 	
-	public void cascade() {
+	// Iterates through all current Matches and uses the appropriate
+	// cascade method for vertical and horizontal Matches
+	
+	private void cascade() {
 		int x, y;
 		for (Match m : matches) {
 			x = m.getOrigin().getCoords().getX();
@@ -68,11 +84,7 @@ public class GameLogic
 		return matches.size() > 0;
 	}
 	
-	public HashSet<Match> getMatches() {
-		return matches;
-	}
-	
-	public void displayTotalPoints() {
+	private void displayTotalPoints() {
 		System.out.println("Points: " + points);
 	}
 	
@@ -84,7 +96,14 @@ public class GameLogic
 		System.out.println("Turns left: " + turnsLeft);
 	}
 	
-	public void takeTurn() {
+	public void takeTurn(Scanner in) {
+		System.out.print("Enter y1, x1: ");
+		int y1 = in.nextInt();
+		int x1 = in.nextInt();
+		System.out.print("Enter y2, x2: ");
+		int y2 = in.nextInt();
+		int x2 = in.nextInt();
+		board.swap(y1, x1, y2, x2);
 		--turnsLeft;
 	}
 	
@@ -103,14 +122,14 @@ public class GameLogic
 	}
 	
 	private void cascadeVertical(int y, int x, int size) {
-		// replace each tile in the match with the tile [size] spaces above it
+		// Replace each tile in the match with the tile [size] spaces above it
 		// i.e (4,5) in a match of size 4 becomes the tile at (0,5)
 		for (int i = size - y; i < size; ++i) {
 			board.getBoard()[y+i][x] = board.getBoard()[y+i-size][x];
 			board.getBoard()[y+i][x].setCoords(y+i, x);
 		}
 
-		// fill in top [size] spaces with new tiles
+		// Fill in top [size] spaces with new tiles
 		for (int i = 0; i < size; ++i) {
 			board.getBoard()[i][x] = generatePiece();
 			board.getBoard()[i][x].setCoords(i, x);
@@ -143,6 +162,10 @@ public class GameLogic
 				// Horizontal matches still need to be checked for all i
 				
 				if (i < board.getHeight()-2) {
+					
+					// If a piece is already part of a Match, we don't check if it's an origin for
+					// a Match
+					
 					if (isInMatch(board.getPiece(i, j))) {
 						continue;
 					}
